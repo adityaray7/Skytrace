@@ -1,0 +1,33 @@
+# IDE and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+env/
+
+# Node
+node_modules/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend secrets
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Backend secrets
+# Ignore any Google Cloud service account keys
+*.json
+
+# Build artifacts
+build/
+dist/
