@@ -13,7 +13,7 @@ const LogoImage = ({ className = '', size = 'medium' }) => {
   return (
     <div className={`logo ${className}`} style={{ width, height }}>
       <img 
-        src="/logo.png" 
+        src="/logo_dark.png" 
         alt="SkyTrace - Satellite Imagery Timeline Explorer"
         style={{ 
           width: '100%', 

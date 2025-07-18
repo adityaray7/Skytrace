@@ -16,7 +16,9 @@ const Viewer = ({ selectedImage, onClose }) => {
             <img src={selectedImage.thumbnail_url.replace('dimensions=256', 'dimensions=1024')} alt={`Full view from ${new Date(selectedImage.timestamp * 1000).toLocaleDateString()}`} />
             <div className="viewer-metadata">
                 <p><strong>Date:</strong> {new Date(selectedImage.timestamp * 1000).toLocaleString()}</p>
-                <p><strong>Cloud Cover:</strong> {selectedImage.cloud_cover.toFixed(2)}%</p>
+                {selectedImage.cloud_cover !== undefined && (
+                  <p><strong>Cloud Cover:</strong> {selectedImage.cloud_cover.toFixed(2)}%</p>
+                )}
                 <p><strong>Source:</strong> {selectedImage.source}</p>
             </div>
         </div>
