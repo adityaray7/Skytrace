@@ -1,5 +1,7 @@
 # SkyTrace - Satellite Imagery Timeline Explorer
 
+![SkyTrace Application Demo](frontend/public/demo.png)
+
 SkyTrace is a web application that allows users to explore satellite imagery over time. Select any point on the globe and instantly view a historical timeline of Sentinel-2 satellite images, streamed directly from Google Earth Engine.
 
 ## Tech Stack
