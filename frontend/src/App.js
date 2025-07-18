@@ -13,6 +13,7 @@ function App() {
   const [statusText, setStatusText] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [satelliteSource, setSatelliteSource] = useState('sentinel2'); // 'sentinel2', 'sentinel1', 'sentinel3', 'landsat8', or 'naip'
   const [timelineHeight, setTimelineHeight] = useState(250); // Default height in pixels
   const timelineRef = useRef(null);
 
@@ -35,16 +36,37 @@ function App() {
     window.addEventListener('mouseup', stopResize);
   }, [handleResize, stopResize]);
 
+  // Handle search completion - just update the map position
+  const handleSearchComplete = useCallback(({ lat, lng }) => {
+    // Just update the map position without fetching images
+    setStatusText('Location updated. Click on the map to view images.');
+  }, []);
+
+  // Handle location selection - fetch images for the selected location
   const handleLocationSelect = useCallback(async ({ lat, lng }) => {
-    // Reset state for new selection
+    if (isLoading) return; // Prevent multiple clicks while loading
+    
     setImages([]);
     setSelectedImage(null);
     setIsLoading(true);
     setIsStreaming(true);
-    setStatusText('Fetching image list...');
-
+    setStatusText('Fetching images...');
+    
     try {
-      let apiUrl = `/api/v1/images?lat=${lat}&lon=${lng}`;
+      // Choose the appropriate endpoint based on the selected satellite source
+      let endpoint = 'images';
+      if (satelliteSource === 'naip') {
+        endpoint = 'high-res-images';
+      } else if (satelliteSource === 'sentinel1') {
+        endpoint = 'sentinel1';
+      } else if (satelliteSource === 'sentinel2') {
+        endpoint = 'sentinel2';
+      } else if (satelliteSource === 'sentinel3') {
+        endpoint = 'sentinel3';
+      } else if (satelliteSource === 'landsat8') {
+        endpoint = 'landsat8';
+      }
+      let apiUrl = `/api/v1/${endpoint}?lat=${lat}&lon=${lng}`;
       if (startDate) {
         apiUrl += `&start_date=${startDate}`;
       }
@@ -100,7 +122,7 @@ function App() {
       setIsLoading(false);
       setIsStreaming(false);
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, satelliteSource]);
 
   const handleImageSelect = (image) => {
     setSelectedImage(image);
@@ -136,9 +158,26 @@ function App() {
               onChange={e => setEndDate(e.target.value)} 
             />
           </div>
+          <div className="satellite-selector">
+            <label htmlFor="satellite-source">Satellite:</label>
+            <select
+              id="satellite-source"
+              value={satelliteSource}
+              onChange={e => setSatelliteSource(e.target.value)}
+            >
+              <option value="sentinel2">Sentinel-2 (Optical, 10m)</option>
+              <option value="sentinel1">Sentinel-1 (Radar, 10m, All-Weather)</option>
+              <option value="landsat8">Landsat 8 (Optical, 30m, Historical)</option>
+              <option value="sentinel3">Sentinel-3 (Ocean/Land, 300m)</option>
+              <option value="naip">NAIP (US Only, 1m)</option>
+            </select>
+          </div>
         </div>
         <div className="map-container">
-          <Map onLocationSelect={handleLocationSelect} />
+          <Map 
+            onLocationSelect={handleLocationSelect}
+            onSearchComplete={handleSearchComplete}
+          />
           {isLoading && <div className='loading-overlay'>{statusText}</div>}
         </div>
         <div className="timeline-wrapper" ref={timelineRef} style={{ height: `${timelineHeight}px` }}>
