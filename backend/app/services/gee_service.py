@@ -46,6 +46,7 @@ async def get_sentinel2_images_stream(lat: float, lon: float, start_date: str = 
     collection = (
         ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
         .filterBounds(point)
+        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
     )
 
     # Apply date filters if provided
@@ -57,7 +58,7 @@ async def get_sentinel2_images_stream(lat: float, lon: float, start_date: str = 
     collection = collection.sort('system:time_start', False).limit(50)
     
     # Apply cloud masking
-    # collection = collection.map(mask_s2_clouds)
+    collection = collection.map(mask_s2_clouds)
 
     # Get the list of images
     image_list = collection.toList(collection.size())
