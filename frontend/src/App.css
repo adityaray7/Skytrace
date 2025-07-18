@@ -311,11 +311,53 @@ body {
 
 .controls-container {
   display: flex;
-  justify-content: center;
-  gap: 24px;
-  padding: 20px 32px;
+  gap: 16px;
+  padding: 12px 16px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
+  z-index: 10;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Map Type Toggle */
+.map-type-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-primary);
+  border-radius: 20px;
+  padding: 4px;
+  margin-right: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.map-type-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.map-type-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.map-type-btn.active {
+  background: var(--accent-color);
+  color: white;
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.3);
+}
+
+.map-type-btn i {
+  font-size: 16px;
 }
 
 .control-group {

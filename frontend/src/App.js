@@ -14,6 +14,7 @@ function App() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [satelliteSource, setSatelliteSource] = useState('sentinel2'); // 'sentinel2', 'sentinel1', 'sentinel3', 'landsat8', or 'naip'
+  const [mapType, setMapType] = useState('satellite'); // 'satellite', 'roadmap', or 'hybrid'
   const [timelineHeight, setTimelineHeight] = useState(250); // Default height in pixels
   const timelineRef = useRef(null);
 
@@ -158,6 +159,29 @@ function App() {
               onChange={e => setEndDate(e.target.value)} 
             />
           </div>
+          <div className="map-type-toggle">
+            <button 
+              className={`map-type-btn ${mapType === 'satellite' ? 'active' : ''}`}
+              onClick={() => setMapType('satellite')}
+              title="Satellite View"
+            >
+              <i className="fas fa-satellite-dish"></i>
+            </button>
+            <button 
+              className={`map-type-btn ${mapType === 'roadmap' ? 'active' : ''}`}
+              onClick={() => setMapType('roadmap')}
+              title="Map View"
+            >
+              <i className="fas fa-map"></i>
+            </button>
+            <button 
+              className={`map-type-btn ${mapType === 'hybrid' ? 'active' : ''}`}
+              onClick={() => setMapType('hybrid')}
+              title="Hybrid View"
+            >
+              <i className="fas fa-layer-group"></i>
+            </button>
+          </div>
           <div className="satellite-selector">
             <label htmlFor="satellite-source">Satellite:</label>
             <select
@@ -177,6 +201,7 @@ function App() {
           <Map 
             onLocationSelect={handleLocationSelect}
             onSearchComplete={handleSearchComplete}
+            mapType={mapType}
           />
           {isLoading && <div className='loading-overlay'>{statusText}</div>}
         </div>

@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Wrapper } from '@googlemaps/react-wrapper';
 
-const Map = ({ onLocationSelect, onSearchComplete }) => {
+const Map = ({ onLocationSelect, onSearchComplete, mapType = 'satellite' }) => {
   const ref = useRef(null);
   const [map, setMap] = useState();
   const [autocomplete, setAutocomplete] = useState(null);
   const searchInput = useRef(null);
+
+  // Update map type when prop changes
+  useEffect(() => {
+    if (map) {
+      map.setMapTypeId(mapType);
+    }
+  }, [mapType, map]);
 
   useEffect(() => {
     if (ref.current && !map) {
@@ -13,7 +20,13 @@ const Map = ({ onLocationSelect, onSearchComplete }) => {
         center: { lat: 34.0522, lng: -118.2437 }, // Default to Los Angeles
         zoom: 8,
         mapId: 'SKYTRACE_MAP_ID', // For advanced map styling
-        mapTypeControl: false,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+          position: window.google.maps.ControlPosition.TOP_RIGHT,
+          mapTypeIds: ['roadmap', 'satellite', 'hybrid']
+        },
+        mapTypeId: mapType,
         streetViewControl: false,
         fullscreenControl: true,
       });
